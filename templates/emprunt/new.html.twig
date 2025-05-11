@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un emprunt{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Créer un nouvel emprunt</h1>
+
+        {# Affichage des messages flash #}
+        {% if app.flashes('success') %}
+            <div class="alert alert-success">
+                {% for message in app.flashes('success') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {# Formulaire d'emprunt #}
+        <div class="card">
+            <div class="card-body">
+                {{ form_start(form) }}
+
+                    <div class="mb-3">
+                        {{ form_row(form.livre) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.utilisateur) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.dateEmprunt) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.dateRetour) }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Emprunter</button>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <a href="{{ path('app_emprunt_list') }}" class="btn btn-secondary mt-3">Retour à la liste des emprunts</a>
+    </div>
+{% endblock %}

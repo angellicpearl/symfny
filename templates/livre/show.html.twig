@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Livre : {{ livre.titre }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-primary">{{ livre.titre }}</h1>
+
+        <div class="row">
+            <div class="col-md-8">
+                <p><strong>Auteur :</strong> {{ livre.auteur.nom }}</p>
+                <p><strong>Genre :</strong> {{ livre.genre.nom }}</p>
+                <p><strong>ISBN :</strong> {{ livre.ISBN }}</p>
+                <p><strong>Description :</strong></p>
+                <p>{{ livre.description }}</p>
+
+                {% if app.user %}
+                    {% if livre.disponible %}
+                        <form method="post" action="{{ path('app_emprunt_livre', {'livre_id': livre.id}) }}">
+                            <button type="submit" class="btn btn-primary">
+                                Emprunter ce livre
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            Ce livre est actuellement emprunté. Il peut être emprunté à nouveau après sa date de retour.
+                        </div>
+                    {% endif %}
+
+                    {# Affichage des messages flash #}
+                    {% for message in app.flashes('danger') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-warning mt-3">
+                        Connectez-vous pour pouvoir emprunter ce livre.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
