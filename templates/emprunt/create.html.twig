@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Emprunter "{{ livre.titre }}"</h2>
+    
+    {{ form_start(form) }}
+        {{ form_row(form.dateEmprunt) }}
+        {{ form_row(form.dateRetour) }}
+        
+        <button type="submit" class="btn btn-success">
+            Confirmer l'emprunt
+        </button>
+    {{ form_end(form) }}
+{% endblock %}

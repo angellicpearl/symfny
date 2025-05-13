@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Livre : {{ livre.titre }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-primary">{{ livre.titre }}</h1>
+
+        <div class="row">
+            <div class="col-md-8">
+                <p><strong>Auteur :</strong> {{ livre.auteur.nom }}</p>
+                <p><strong>Genre :</strong> {{ livre.genre.nom }}</p>
+                <p><strong>ISBN :</strong> {{ livre.ISBN }}</p>
+                <p><strong>Description :</strong></p>
+                <p>{{ livre.description }}</p>
+
+                {# Affichage des messages flash #}
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% if is_granted('ROLE_USER') %}
+                    {% if livre.isDisponible() %}
+                        <form method="post" action="{{ path('app_emprunt_create', {'id': livre.id}) }}">
+                            <button class="btn btn-primary">Emprunter ce livre</button>
+                        </form>
+                    {% else %}
+                        {# Version 1: Calcul de la date de retour directement ici #}
+                        {% set nextAvailableDate = null %}
+                        {% for emprunt in livre.emprunts %}
+                            {% if emprunt.dateRetour > date() %}
+                                {% set nextAvailableDate = emprunt.dateRetour %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {# Version alternative : Utiliser une méthode de l'entité (décommenter si dispo) #}
+                        {# {% set nextAvailableDate = livre.getProchainRetour() %} #}
+
+                        <div class="alert alert-info mt-3">
+                            {% if nextAvailableDate %}
+                                Retour prévu le {{ nextAvailableDate|date('d/m/Y') }}
+                            {% else %}
+                                Disponible dès maintenant
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

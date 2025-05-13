@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h2>📚 Derniers livres ajoutés</h2>
+  <ul class="list-group mb-4">
+    {% for livre in livres %}
+      <li class="list-group-item">
+        <strong>{{ livre.titre }}</strong> 
+      </li>
+    {% else %}
+      <li class="list-group-item text-muted">Aucun livre trouvé.</li>
+    {% endfor %}
+  </ul>
+
+  <div class="mb-4 text-end">
+    <a href="{{ path('app_livre_index') }}" class="btn btn-outline-primary">
+      Voir tous les livres
+    </a>
+  </div>
+
+  <h2>🧑‍💼 Auteurs</h2>
+  <ul class="list-group mb-4">
+    {% for auteur in auteurs %}
+      <li class="list-group-item">{{ auteur.nom }}</li>
+    {% else %}
+      <li class="list-group-item text-muted">Aucun auteur trouvé.</li>
+    {% endfor %}
+  </ul>
+   <div class="mb-4 text-end">
+    <a href="{{ path('app_auteur_index') }}" class="btn btn-outline-primary">
+      Voir tous les auteurs
+    </a>
+  </div>
+
+  <h2>🏷️ Genres</h2>
+  <ul class="list-group">
+    {% for genre in genres %}
+      <li class="list-group-item">{{ genre.nom }}</li>
+    {% else %}
+      <li class="list-group-item text-muted">Aucun genre trouvé.</li>
+    {% endfor %}
+
+  </ul>
+     <div class="mb-4 text-end">
+
+      <a href="{{ path('app_genre_index') }}" class="btn btn-outline-primary">
+      Voir tous les genres
+    </a>
+    
+</div>
+ <h2>Derniers emprunts</h2>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Livre</th>
+                    <th scope="col">Utilisateur</th>
+                    <th scope="col">Date d'emprunt</th>
+                    <th scope="col">Date de retour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emprunt in emprunts %}
+                    <tr>
+                        <td>{{ emprunt.livre.titre }}</td>
+                        <td>{{ emprunt.utilisateur.nom }}</td>
+                        <td>{{ emprunt.dateEmprunt|date('d/m/Y') }}</td>
+                        <td>{{ emprunt.dateRetour|date('d/m/Y') }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucun emprunt trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
